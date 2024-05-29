@@ -1,5 +1,6 @@
 import React from "react";
-import Header from "./components/Header";
+import Header from "./components/Navbar";
+import "./App.css"
 
 function App() {
   return (
@@ -7,7 +8,6 @@ function App() {
 		<React.StrictMode>
 			<Header/>
 		</React.StrictMode>
-		<h2>Hello world</h2>
 	</div>
   );
 };
