@@ -1,5 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
+import Header from "./components/Header";
+import Homepage from "./components/Homepage";
 import "./App.css"
 
 function App() {
@@ -7,10 +9,9 @@ function App() {
     <div className="App">
 		<React.StrictMode>
 			<Navbar/>
+			<Header/>
+			<Homepage/>
 		</React.StrictMode>
-		<header>
-			<h1>Welcome to senharald.com!</h1>
-		</header>
 	</div>
   );
 };
