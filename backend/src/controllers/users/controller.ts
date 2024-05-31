@@ -84,11 +84,6 @@ export const loginCtrl = async (req: Request, res: Response) => {
 };
 
 export const logoutCtrl = async (req: Request, res: Response) => {
-	if (!req.session.userAuth) {
-		res.status(400).send("not logged in");
-		return;
-	};
-
 	req.session.userAuth = null;
 	res.status(200).send("logged out");
 };

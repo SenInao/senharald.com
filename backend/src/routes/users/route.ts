@@ -1,5 +1,6 @@
 import express from "express";
 import {registerCtrl, loginCtrl, logoutCtrl} from "../../controllers/users/controller";
+import authenticate from "../../middlewares/authenticate";
 
 const userApiRoutes = express.Router();
 
@@ -10,6 +11,6 @@ userApiRoutes.post("/register", registerCtrl);
 userApiRoutes.post("/login", loginCtrl);
 
 //Logout
-userApiRoutes.post("/logout", logoutCtrl);
+userApiRoutes.post("/logout", authenticate, logoutCtrl);
 
 export default userApiRoutes;
