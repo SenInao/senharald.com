@@ -7,12 +7,19 @@
 	height: 100vh;
 }
 
-.Homepage-content main{
-	scroll-snap-align: start;
-	position: relative;
+.Homepage-content {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
-.Homepage-content main h1{
+.Homepage-content main {
+	scroll-snap-align: start;
+	position: relative;
+	height: 100vh;
+}
+
+.Homepage-content main h1 {
 	color: white;
 	position: absolute;
 	top: 5%;
@@ -43,7 +50,6 @@
 	border: none;
 	border-radius: 100px;
 	font-size: 1.3rem;
-
 	transition: transform 0.2s ease-in-out;
 }
 
@@ -53,7 +59,7 @@
 
 .Homepage-content img {
 	width: 100%;
-	height: 100vb;
+	height: 100vh; /* Match the container height */
 	transition: filter 0.3s ease-in-out, transform 0.5s ease-in-out;
 }
 
