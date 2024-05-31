@@ -1,9 +1,8 @@
-import express, { Request, Response, NextFunction} from 'express';
-import userApiRoutes from "./routes/users/route"
+import express from 'express';
+import userApiRoutes from "./routes/user/route"
 import dbConnect from './config/db';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import dotenv from "dotenv";
+import configureSessions from './config/session';
 
 //enable environment
 dotenv.config();
@@ -18,25 +17,7 @@ declare module 'express-serve-static-core' {
 }
 
 //express-session
-const sessionKey = process.env.SESSION_KEY;
-const mongoUrl = process.env.MONGO_URL;
-
-if (!sessionKey || !mongoUrl) {
-	throw new Error("mission session key")
-};
-
-app.use(
-	session({
-		secret:sessionKey,
-		resave:false,
-		saveUninitialized:true,
-		store: MongoStore.create({
-			mongoUrl:mongoUrl,
-			ttl: 14 * 24 * 60 * 60,
-		}),
-	})
-);
-
+configureSessions(app);
 
 //connecting to database
 dbConnect();
@@ -45,6 +26,6 @@ dbConnect();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.use('/api/users', userApiRoutes);
+app.use('/api/user', userApiRoutes);
 
 export default app;

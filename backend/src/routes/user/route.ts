@@ -1,5 +1,5 @@
 import express from "express";
-import {registerCtrl, loginCtrl, logoutCtrl} from "../../controllers/users/controller";
+import {registerCtrl, loginCtrl, logoutCtrl} from "../../controllers/user/controller";
 import authenticate from "../../middlewares/authenticate";
 
 const userApiRoutes = express.Router();
