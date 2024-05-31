@@ -1,5 +1,6 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
+import bcrypt from "bcryptjs";
 
 const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -10,7 +11,6 @@ const registerCtrl = async (req: Request, res: Response) => {
 	};
 
 	try {
-		console.log(fullname, username, email, password);
 		const emailTaken = await User.findOne({email});
 		const usernameTaken = await User.findOne({username});
 
@@ -19,7 +19,19 @@ const registerCtrl = async (req: Request, res: Response) => {
 			return;
 		};
 
-		res.status(200).send("OK");
+		const salt = await bcrypt.genSalt(10);
+		const hash = await bcrypt.hash(password, salt);
+
+		const user = await User.create({
+			fullname,
+			username,
+			email,
+			password: hash,
+		});
+
+		user.save({validateBeforeSave: false});
+
+		res.status(200).send("Success");
 		return;
 	} catch (error) {
 		console.log(error);
