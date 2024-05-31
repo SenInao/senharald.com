@@ -1,12 +1,26 @@
 header {
-	height: 60vh;
-	display: flex;
+	height: 100vb;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 }
 
 header h1 {
+	height: 50vh;
 	margin: 30px;
 	font-size: 7vw;
+}
+
+header button {
+	width: 5rem;
+	height: 5rem;
+	font-size: 1.8rem;
+	border-radius: 5rem;
+	border: none;
+	color: black;
+	transition: transform 0.1s ease-in-out;
+}
+
+header button:hover {
+	transform: scale(1.1);
 }
