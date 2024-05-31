@@ -2,8 +2,13 @@ import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
 
-const registerCtrl = async (req: Request, res: Response) => {
+export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
+
+	if (req.session.userAuth) {
+		res.status(200).send("already logged in");
+		return;
+	};
 
 	if (!fullname || !username || !email || !password) {
 		res.status(400).send("Please provide all required information");
@@ -35,8 +40,46 @@ const registerCtrl = async (req: Request, res: Response) => {
 		return;
 	} catch (error) {
 		console.log(error);
+		res.status(400).send("server error");
 		return;
 	};
 };
 
-export default registerCtrl;
+export const loginCtrl = async (req: Request, res: Response) => {
+	const {username, password} = req.body;
+
+	if (req.session.userAuth) {
+		res.status(200).send("already logged in");
+		return;
+	};
+
+	if (!username || !password) {
+		res.status(400).send("Please provide all information");
+		return;
+	};
+
+	try {
+		const userFound = await User.findOne({username});
+
+		if (!userFound) {
+			res.status(400).send("Wrong username");
+			return;
+		};
+
+		const correctPassword = await bcrypt.compare(password, userFound.password);
+
+		if (!correctPassword) {
+			res.status(400).send("Wrong password");
+			return;
+		};
+
+		req.session.userAuth = userFound.id;
+
+		res.status(200).send("Success");
+		return;
+	} catch (error) {
+		console.log(error);
+		res.status(400).send("server error");
+	};
+};
+
