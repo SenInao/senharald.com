@@ -110,6 +110,41 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 	};
 };
 
-export const profileCtrl = async (req: Request, res: Response) => {
+export const updateProfileCtrl = async (req: Request, res: Response) => {
+	const {username, fullname, email} = req.body;
 
-}
+	if (!username || !fullname || !email) {
+		res.status(400).send("please provide updated info");
+		return;
+	};
+
+	try {
+		const emailTaken = await User.findOne({email});
+		const usernameTaken = await User.findOne({username});
+
+		if (emailTaken) {
+			res.status(400).send("email taken!");
+			return;
+		} else if (usernameTaken) {
+			res.status(400).send("username taken!");
+			return;
+		};
+
+		const user = await User.findByIdAndUpdate(
+			req.session.userAuth,
+			{
+				fullname,
+				username,
+				email
+			},
+			{new: true}
+		);
+		
+		res.status(200).json(user);
+		
+	} catch (error) {
+		console.log(error);
+		res.status(400).send("server error");
+		return;
+	};
+};
