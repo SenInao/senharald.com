@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Request, Response} from 'express';
 import userApiRoutes from "./routes/user/route"
 import dbConnect from './config/db';
 import dotenv from "dotenv";
@@ -14,7 +14,7 @@ declare module 'express-serve-static-core' {
   interface Request {
     session: any;
   }
-}
+};
 
 //express-session
 configureSessions(app);

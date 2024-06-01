@@ -1,6 +1,7 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
+import { stringify } from "querystring";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -80,10 +81,35 @@ export const loginCtrl = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error);
 		res.status(400).send("server error");
+		return;
 	};
 };
 
 export const logoutCtrl = async (req: Request, res: Response) => {
 	req.session.userAuth = null;
 	res.status(200).send("logged out");
+	return;
 };
+
+export const userProfileCtrl = async (req: Request, res: Response) => {
+	try {
+		const user = await User.findById(req.session.userAuth);
+
+		if (!user) {
+			res.status(400).send("user not found");
+			return;
+		};
+
+		res.status(200).json(user);
+		return;
+
+	} catch (error) {
+		console.log(error);
+		res.status(400).send("server error");
+		return;
+	};
+};
+
+export const profileCtrl = async (req: Request, res: Response) => {
+
+}
