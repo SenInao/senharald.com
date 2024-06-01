@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './Homepage.css';
+import "./Header.css";
 
 const Homepage: React.FC = () => {
   const imageRefs = useRef<HTMLImageElement[]>([]);
@@ -66,8 +67,21 @@ const Homepage: React.FC = () => {
     });
   };
 
+  const handleButtonClick = () => {
+		const targetElement = document.getElementById("homepage-start")
+		if (targetElement) {
+			targetElement.scrollIntoView();
+		};
+    };
+
   return (
+	<div className='Homepage'>
+    <header>
+        <h1>Welcome to senharald.com!</h1>
+        <button onClick={handleButtonClick}>↓</button>
+    </header>
     <div className="Homepage-content">
+
       <main id='homepage-start'>
         <img src={`${process.env.PUBLIC_URL}/assets/spaceship.jpg`} alt="Spaceship" ref={el => el && imageRefs.current.push(el)}/>
         <h1 ref={el => el && h1Refs.current.push(el)}>GAMES</h1>
@@ -87,6 +101,7 @@ const Homepage: React.FC = () => {
 		<button>Check out  →</button>
       </main>
     </div>
+	</div>
   );
 };
 

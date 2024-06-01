@@ -2,9 +2,7 @@ import "./Navbar.css"
 import { CgProfile } from "react-icons/cg";
 import { useState } from 'react';
 
-
 const Navbar = () => {
-    
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleMenu = () => {
@@ -25,7 +23,7 @@ const Navbar = () => {
 					<button className="navbar-toggle" onClick={toggleMenu}>
 						<CgProfile size={50}/>
 					</button>
-					<li className={isOpen ? "open" : "closed"}><a href="/">Login</a></li>
+					<li className={isOpen ? "open" : "closed"}><a href="/login">Login</a></li>
 					<li className={isOpen ? "open" : "closed"}><a href="/">Register</a></li>
 					<li className={isOpen ? "open" : "closed"}><a href="/">Profile</a></li>
 				</ul>

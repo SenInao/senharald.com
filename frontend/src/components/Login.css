@@ -1,0 +1,12 @@
+.Loginpage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.Loginpage form {
+	display: flex;
+	flex-direction: column;
+	margin: 5rem;
+}
