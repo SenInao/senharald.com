@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:80/api/user/login', jsonData);
+      const response = await axios.post('/api/user/login', jsonData);
       if (response.data.status) {
         setLogin();
         navigate("/");
