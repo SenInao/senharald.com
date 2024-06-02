@@ -20,8 +20,13 @@ const Login: React.FC = () => {
 
 
     try {
-      const response = await axios.post('/api/user/login', jsonData);
-      console.log(response.data)
+      const response = await axios.post('http://localhost:80/api/user/login', jsonData);
+      if (response.data.status) {
+        console.log("logged in!");
+        console.log(response.data.user)
+      } else {
+        console.log(response.data.message)
+      };
     } catch (error) {
       console.log("error!")
     };

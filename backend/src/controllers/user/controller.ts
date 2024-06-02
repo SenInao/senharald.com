@@ -1,7 +1,6 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
-import { stringify } from "querystring";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -50,7 +49,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
 	const {username, password} = req.body;
 
 	if (req.session.userAuth) {
-		res.status(400).send("already logged in");
+		res.status(200).send({status: false, message: "already logged in"});
 		return;
 	};
 
@@ -100,7 +99,7 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 			return;
 		};
 
-		res.status(200).json(user);
+		res.status(200).json({status: true, user: user});
 		return;
 
 	} catch (error) {

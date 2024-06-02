@@ -3,6 +3,7 @@ import userApiRoutes from "./routes/user/route"
 import dbConnect from './config/db';
 import dotenv from "dotenv";
 import configureSessions from './config/session';
+import cors from "cors";
 
 //enable environment
 dotenv.config();
@@ -15,6 +16,14 @@ declare module 'express-serve-static-core' {
     session: any;
   }
 };
+
+//CORS
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 //express-session
 configureSessions(app);
