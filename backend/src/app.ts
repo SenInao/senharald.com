@@ -18,12 +18,11 @@ declare module 'express-serve-static-core' {
 };
 
 //CORS
-
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true
-};
-app.use(cors(corsOptions));
+//const corsOptions = {
+  //origin: 'http://localhost:3000',
+  //credentials: true
+//};
+//app.use(cors(corsOptions));
 
 //express-session
 configureSessions(app);
