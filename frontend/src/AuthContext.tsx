@@ -11,6 +11,8 @@ interface User {
 interface AuthContextType {
   loggedIn: boolean;
   user: User | null;
+  setLogin: () => void;
+  setLogout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,8 +45,16 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     checkSession();
   }, []);
 
+  const setLogin = () => {
+    setLoggedIn(true);
+  };
+
+  const setLogout = () => {
+    setLoggedIn(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ loggedIn, user }}>
+    <AuthContext.Provider value={{ loggedIn, user, setLogin, setLogout}}>
       {children}
     </AuthContext.Provider>
   );

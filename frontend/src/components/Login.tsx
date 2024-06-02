@@ -1,11 +1,22 @@
 import "./Login.css"
 import axios from "axios";
 import React, {useRef} from "react";
+import { useContext } from 'react';
+import { AuthContext } from "../AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const Login: React.FC = () => {
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const authContext  = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("authContext missing")
+  };
+
+  const {setLogin, setLogout} = authContext;
+  const navigate = useNavigate();
 
   const login = async () => {
     if (!usernameRef.current || !passwordRef.current) {
@@ -18,14 +29,14 @@ const Login: React.FC = () => {
       password: passwordRef.current.value
     };
 
-
     try {
       const response = await axios.post('http://localhost:80/api/user/login', jsonData);
       if (response.data.status) {
-        console.log("logged in!");
-        console.log(response.data.user)
+        setLogin();
+        navigate("/");
       } else {
-        console.log(response.data.message)
+        setLogout();
+        console.log(response.data.message);
       };
     } catch (error) {
       console.log("error!")

@@ -75,7 +75,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
 
 		req.session.userAuth = userFound.id;
 
-		res.status(200).send("Success");
+		res.status(200).json({status: true, user:userFound});
 		return;
 	} catch (error) {
 		console.log(error);
@@ -86,7 +86,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
 
 export const logoutCtrl = async (req: Request, res: Response) => {
 	req.session.userAuth = null;
-	res.status(200).send("logged out");
+	res.status(200).json({status:true});
 	return;
 };
 

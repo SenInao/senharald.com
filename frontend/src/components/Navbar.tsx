@@ -2,6 +2,7 @@ import { CgProfile } from "react-icons/cg";
 import { useState, useContext } from 'react';
 import { AuthContext } from "../AuthContext";
 import "./Navbar.css"
+import axios from "axios";
 
 const Navbar: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -10,7 +11,7 @@ const Navbar: React.FC = () => {
     throw new Error("authcontext error!")
   };
 
-  const {loggedIn} = authContext;
+  const {loggedIn, setLogout} = authContext;
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -18,6 +19,20 @@ const Navbar: React.FC = () => {
 		console.log("button")
 		setIsOpen(!isOpen);
 	};
+
+  const logout = async () => {
+    try {
+      const response = await axios.post('http://localhost:80/api/user/logout');
+      if (response.data.status) {
+        setLogout();
+      } else {
+        console.log(response.data.message);
+        setLogout();
+      };
+    } catch (error) {
+      console.log("error!")
+    };
+  };
 
   return (
 		<nav>
@@ -34,7 +49,7 @@ const Navbar: React.FC = () => {
 						  <CgProfile size={50}/>
 					  </button>
 					  <li className={isOpen ? "open" : "closed"}><a href="/">Profile</a></li>
-					  <li className={isOpen ? "open" : "closed"}><a href="/">Logout</a></li>
+					  <li className={isOpen ? "open" : "closed"}><a href="/" onClick={logout}>Logout</a></li>
           </ul>
         ) : (
           <ul>
