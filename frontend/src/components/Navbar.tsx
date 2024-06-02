@@ -1,8 +1,17 @@
-import "./Navbar.css"
 import { CgProfile } from "react-icons/cg";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from "../AuthContext";
+import "./Navbar.css"
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("authcontext error!")
+  };
+
+  const {loggedIn} = authContext;
+
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleMenu = () => {
@@ -10,7 +19,7 @@ const Navbar = () => {
 		setIsOpen(!isOpen);
 	};
 
-    return (
+  return (
 		<nav>
 			<div className="sitenav">
 				<ul>
@@ -19,17 +28,26 @@ const Navbar = () => {
 				</ul>
 			</div>
 			<div className="usernav">
-				<ul>
-					<button className="navbar-toggle" onClick={toggleMenu}>
-						<CgProfile size={50}/>
-					</button>
-					<li className={isOpen ? "open" : "closed"}><a href="/login">Login</a></li>
-					<li className={isOpen ? "open" : "closed"}><a href="/">Register</a></li>
-					<li className={isOpen ? "open" : "closed"}><a href="/">Profile</a></li>
-				</ul>
+        {loggedIn ? (
+          <ul>
+					  <button className="navbar-toggle" onClick={toggleMenu}>
+						  <CgProfile size={50}/>
+					  </button>
+					  <li className={isOpen ? "open" : "closed"}><a href="/">Profile</a></li>
+					  <li className={isOpen ? "open" : "closed"}><a href="/">Logout</a></li>
+          </ul>
+        ) : (
+          <ul>
+					  <button className="navbar-toggle" onClick={toggleMenu}>
+						  <CgProfile size={50}/>
+					  </button>
+					  <li className={isOpen ? "open" : "closed"}><a href="/login">Login</a></li>
+					    <li className={isOpen ? "open" : "closed"}><a href="/">Register</a></li>
+          </ul>
+        )}
 			</div>
 		</nav>
-    );
+  );
 };
 
 export default Navbar;
