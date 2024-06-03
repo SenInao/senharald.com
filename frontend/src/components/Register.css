@@ -63,6 +63,12 @@
 }
 
 .inputform-container #register-button {
+  height: 3rem;
+  width: 6rem;
+  border: none;
+  background-color: var(--text-color);
+  border-radius: 2rem;
+  color: black;
   position: relative;
   animation: button;
   animation-duration: 2.9s;

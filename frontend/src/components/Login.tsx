@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('/api/user/login', jsonData);
+      const response = await axios.post('http://localhost:80/api/user/login', jsonData);
       if (response.data.status) {
         setLogin();
         navigate("/");
@@ -39,25 +39,25 @@ const Login: React.FC = () => {
         console.log(response.data.message);
       };
     } catch (error) {
-      console.log("error!")
+      console.log(error);
     };
   };
 
 
 	return (
 		<div className="Loginpage">
-      <div className="inputform-container">
+      <form className="inputform-container">
         <div className="input-container">
           <label id="username-text-login">Username</label>
-          <input type="text" ref={usernameRef} id="username-input-login"/>
+          <input type="text" autoComplete="username" ref={usernameRef} id="username-input-login"/>
         </div>
 
         <div className="input-container">
           <label id="password-text-login">Password</label>
-          <input type="password" ref={passwordRef} id="password-input-login"/>
+          <input type="password" autoComplete="current-password" ref={passwordRef} id="password-input-login"/>
         </div>
         <button onClick={login} id="login-button">Login</button>
-      </div>
+      </form>
 		</div>
 	);
 };

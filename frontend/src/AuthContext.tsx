@@ -28,7 +28,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('/api/user');
+        const response = await axios.get('http://localhost:80/api/user');
         if (response.data.status) {
           setLoggedIn(true);
           setUser(response.data.user);

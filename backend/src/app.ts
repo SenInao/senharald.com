@@ -17,22 +17,22 @@ declare module 'express-serve-static-core' {
   }
 };
 
+//JSON and URL-encoded parsers
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 //CORS
-//const corsOptions = {
-  //origin: 'http://localhost:3000',
-  //credentials: true
-//};
-//app.use(cors(corsOptions));
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 //express-session
 configureSessions(app);
 
 //connecting to database
 dbConnect();
-
-//JSON and URL-encoded parsers
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 
 app.use('/api/user', userApiRoutes);
 

@@ -6,12 +6,12 @@ export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
 
 	if (req.session.userAuth) {
-		res.status(400).send("already logged in");
+		res.status(200).json({status: false, message:"already logged in"});
 		return;
 	};
 
 	if (!fullname || !username || !email || !password) {
-		res.status(400).send("Please provide all required information");
+		res.status(200).json({status: false, message:"please provide all fields"});
 		return;
 	};
 
@@ -20,7 +20,7 @@ export const registerCtrl = async (req: Request, res: Response) => {
 		const usernameTaken = await User.findOne({username});
 
 		if (emailTaken || usernameTaken) {
-			res.status(400).send("email or username in use");
+		  res.status(200).json({status: false, message:"email or username in use"});
 			return;
 		};
 
@@ -36,7 +36,8 @@ export const registerCtrl = async (req: Request, res: Response) => {
 
 		user.save({validateBeforeSave: false});
 
-		res.status(200).send("Success");
+		req.session.userAuth = user.id;
+		res.status(200).json({status: true, user:user});
 		return;
 	} catch (error) {
 		console.log(error);
@@ -54,7 +55,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
 	};
 
 	if (!username || !password) {
-		res.status(400).send("Please provide all information");
+		res.status(200).send({status: false, message: "please provide all fields"});
 		return;
 	};
 
@@ -62,14 +63,14 @@ export const loginCtrl = async (req: Request, res: Response) => {
 		const userFound = await User.findOne({username});
 
 		if (!userFound) {
-			res.status(400).send("Wrong username");
+		  res.status(200).send({status: false, message: "wrong username or password"});
 			return;
 		};
 
 		const correctPassword = await bcrypt.compare(password, userFound.password);
 
 		if (!correctPassword) {
-			res.status(400).send("Wrong password");
+		  res.status(200).send({status: false, message: "wrong username or password"});
 			return;
 		};
 
@@ -95,7 +96,7 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 		const user = await User.findById(req.session.userAuth);
 
 		if (!user) {
-			res.status(400).send("user not found");
+		  res.status(200).json({status: false, message:"user not found"});
 			return;
 		};
 
