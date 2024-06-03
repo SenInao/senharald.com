@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
 						  <CgProfile size={50}/>
 					  </button>
 					  <li className={isOpen ? "open" : "closed"}><a href="/login">Login</a></li>
-					    <li className={isOpen ? "open" : "closed"}><a href="/">Register</a></li>
+					    <li className={isOpen ? "open" : "closed"}><a href="/register">Register</a></li>
           </ul>
         )}
 			</div>

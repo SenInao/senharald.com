@@ -38,13 +38,13 @@
   100% {left: 0%;}
 }
 
-.input-container #username-text{
+.input-container #username-text-login{
   position: relative;
   animation-name: text;
   animation-duration: 0.5s;
 }
 
-.input-container #password-text{
+.input-container #password-text-login{
   position: relative;
   animation-name: text;
   animation-duration: 1.1s;
@@ -55,13 +55,13 @@
   100% {left: 0%;}
 }
 
-.input-container #username-input{
+.input-container #username-input-login{
   position: relative;
   animation-name: input;
   animation-duration: 0.8s;
 }
 
-.input-container #password-input{
+.input-container #password-input-login{
   position: relative;
   animation-name: input;
   animation-duration: 1.4s;
@@ -72,7 +72,7 @@
   100% {top: 0%;}
 }
 
-.inputform-container button {
+.inputform-container #login-button{
   height: 3rem;
   width: 6rem;
   border: none;

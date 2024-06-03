@@ -1,0 +1,69 @@
+.Registerpage {
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes text{
+  0% {left: -50vw;}
+  100% {left: 0%;}
+}
+
+@keyframes input{
+  0% {left: 100vw;}
+  100% {left: 0%;}
+}
+
+@keyframes button {
+  0% {top: 100vh;}
+  100% {top: 0%;}
+}
+
+.inputform-container #fullname-text-register, #email-text-register, #username-text-register, #password-text-register {
+  position: relative;
+  animation: text;
+}
+
+.inputform-container #fullname-input-register, #email-input-register, #username-input-register, #password-input-register {
+  position: relative;
+  animation: input;
+}
+
+.inputform-container #fullname-text-register {
+  animation-duration: 0.5s;
+}
+
+.inputform-container #email-text-register{
+  animation-duration: 1.1s;
+}
+
+.inputform-container #username-text-register{
+  animation-duration: 1.7s;
+}
+
+.inputform-container #password-text-register{
+  animation-duration: 2.3s;
+}
+
+.inputform-container #fullname-input-register {
+  animation-duration: 0.8s;
+}
+
+.inputform-container #email-input-register {
+  animation-duration: 1.4s;
+}
+
+.inputform-container #username-input-register {
+  animation-duration: 2s;
+}
+
+.inputform-container #password-input-register {
+  animation-duration: 2.6s;
+}
+
+.inputform-container #register-button {
+  position: relative;
+  animation: button;
+  animation-duration: 2.9s;
+}

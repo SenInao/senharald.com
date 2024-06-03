@@ -48,15 +48,15 @@ const Login: React.FC = () => {
 		<div className="Loginpage">
       <div className="inputform-container">
         <div className="input-container">
-          <label id="username-text">Username</label>
-          <input type="text" ref={usernameRef} id="username-input"/>
+          <label id="username-text-login">Username</label>
+          <input type="text" ref={usernameRef} id="username-input-login"/>
         </div>
 
         <div className="input-container">
-          <label id="password-text">Password</label>
-          <input type="text" ref={passwordRef} id="password-input"/>
+          <label id="password-text-login">Password</label>
+          <input type="password" ref={passwordRef} id="password-input-login"/>
         </div>
-        <button onClick={login}>Login</button>
+        <button onClick={login} id="login-button">Login</button>
       </div>
 		</div>
 	);
