@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     throw new Error("authcontext error!")
   };
 
-  const {loggedIn, setLogout} = authContext;
+  const {loggedIn, setLoggedIn, setUser} = authContext;
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -22,12 +22,14 @@ const Navbar: React.FC = () => {
 
   const logout = async () => {
     try {
-      const response = await axios.post('http://localhost:80/api/user/logout');
+      const response = await axios.post('/api/user/logout');
       if (response.data.status) {
-        setLogout();
+        setLoggedIn(false);
+        setUser(null);
       } else {
         console.log(response.data.message);
-        setLogout();
+        setLoggedIn(false);
+        setUser(null);
       };
     } catch (error) {
       console.log("error!")
@@ -48,7 +50,7 @@ const Navbar: React.FC = () => {
 					  <button className="navbar-toggle" onClick={toggleMenu}>
 						  <CgProfile size={50}/>
 					  </button>
-					  <li className={isOpen ? "open" : "closed"}><a href="/">Profile</a></li>
+					  <li className={isOpen ? "open" : "closed"}><a href="/profile">Profile</a></li>
 					  <li className={isOpen ? "open" : "closed"}><a href="/" onClick={logout}>Logout</a></li>
           </ul>
         ) : (

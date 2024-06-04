@@ -26,11 +26,23 @@
 
 .input-container input {
   margin: 10px;
-
   border-radius: 2rem;
   border: none;
   height: 2rem;
   background-color: var(--text-color);
+}
+
+#errorLabel {
+  display: none;
+  text-align: center;
+  color: darkred;
+  font-size: 1.5rem;
+  width: 30vh;
+}
+
+#waiting{
+  display: none;
+  font-size: 1.5rem;
 }
 
 @keyframes text{

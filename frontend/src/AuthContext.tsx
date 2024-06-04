@@ -6,13 +6,14 @@ axios.defaults.withCredentials = true;
 interface User {
   fullname: string;
   username: string;
+  email: string;
 }
 
 interface AuthContextType {
   loggedIn: boolean;
   user: User | null;
-  setLogin: () => void;
-  setLogout: () => void;
+  setUser: (value: User | null) => void,
+  setLoggedIn: (value: boolean) => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,7 +29,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('http://localhost:80/api/user');
+        const response = await axios.get('/api/user');
         if (response.data.status) {
           setLoggedIn(true);
           setUser(response.data.user);
@@ -45,16 +46,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     checkSession();
   }, []);
 
-  const setLogin = () => {
-    setLoggedIn(true);
-  };
-
-  const setLogout = () => {
-    setLoggedIn(false);
-  };
-
   return (
-    <AuthContext.Provider value={{ loggedIn, user, setLogin, setLogout}}>
+    <AuthContext.Provider value={{ loggedIn, user, setLoggedIn, setUser}}>
       {children}
     </AuthContext.Provider>
   );
