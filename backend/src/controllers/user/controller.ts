@@ -6,12 +6,12 @@ export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
 
 	if (req.session.userAuth) {
-		res.status(200).json({status: false, message:"already logged in"});
+		res.status(200).json({status: false, message:"Already logged in"});
 		return;
 	};
 
 	if (!fullname || !username || !email || !password) {
-		res.status(200).json({status: false, message:"please provide all fields"});
+		res.status(200).json({status: false, message:"Please provide all fields"});
 		return;
 	};
 
@@ -19,10 +19,13 @@ export const registerCtrl = async (req: Request, res: Response) => {
 		const emailTaken = await User.findOne({email});
 		const usernameTaken = await User.findOne({username});
 
-		if (emailTaken || usernameTaken) {
-		  res.status(200).json({status: false, message:"email or username in use"});
+		if (emailTaken) {
+		  res.status(200).json({status: false, message:"Email in use"});
 			return;
-		};
+		} else if (usernameTaken) {
+      res.status(200).json({status: false, message:"Username in use"})
+      return;
+    };
 
 		const salt = await bcrypt.genSalt(10);
 		const hash = await bcrypt.hash(password, salt);
@@ -37,11 +40,18 @@ export const registerCtrl = async (req: Request, res: Response) => {
 		user.save({validateBeforeSave: false});
 
 		req.session.userAuth = user.id;
-		res.status(200).json({status: true, user:user});
+
+    const jsonUser = {
+      fullname: user.fullname,
+      username: user.username,
+      email: user.email,
+    };
+
+		res.status(200).json({status: true, user:jsonUser});
 		return;
 	} catch (error) {
 		console.log(error);
-		res.status(400).send("server error");
+		res.status(400).send("Server error");
 		return;
 	};
 };
@@ -76,7 +86,13 @@ export const loginCtrl = async (req: Request, res: Response) => {
 
 		req.session.userAuth = userFound.id;
 
-		res.status(200).json({status: true, user:userFound});
+    const jsonUser = {
+      fullname: userFound.fullname,
+      username: userFound.username,
+      email: userFound.email,
+    };
+
+		res.status(200).json({status: true, user:jsonUser});
 		return;
 	} catch (error) {
 		console.log(error);
@@ -100,7 +116,13 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 			return;
 		};
 
-		res.status(200).json({status: true, user: user});
+    const jsonUser = {
+      fullname: user.fullname,
+      username: user.username,
+      email: user.email,
+    };
+
+		res.status(200).json({status: true, user:jsonUser});
 		return;
 
 	} catch (error) {
@@ -114,33 +136,45 @@ export const updateProfileCtrl = async (req: Request, res: Response) => {
 	const {username, fullname, email} = req.body;
 
 	if (!username || !fullname || !email) {
-		res.status(400).send("please provide updated info");
+		res.status(200).json({status:false, message:"Please provide all fields"});
 		return;
 	};
 
 	try {
+
+    const user = await User.findById(req.session.userAuth);
+
+    if (!user) {
+      res.status(200).json({status:false, message:"User not found"});
+      return;
+    };
+
 		const emailTaken = await User.findOne({email});
 		const usernameTaken = await User.findOne({username});
 
-		if (emailTaken) {
-			res.status(400).send("email taken!");
+		if (emailTaken && user.email != email) {
+      res.status(200).json({status:false, message:"Email taken"})
 			return;
-		} else if (usernameTaken) {
-			res.status(400).send("username taken!");
+		} else if (usernameTaken && user.username != username) {
+      res.status(200).json({status:false, message:"Username taken"})
 			return;
 		};
 
-		const user = await User.findByIdAndUpdate(
-			req.session.userAuth,
+		const newUser = await user.updateOne(
 			{
 				fullname,
 				username,
 				email
-			},
-			{new: true}
+			}, {new:true}
 		);
+
+    const jsonData = {
+      fullname:fullname,
+      username:username,
+      email:email,
+    };
 		
-		res.status(200).json(user);
+		res.status(200).json({status:true, user:jsonData});
 		
 	} catch (error) {
 		console.log(error);
