@@ -60,12 +60,12 @@ export const loginCtrl = async (req: Request, res: Response) => {
 	const {username, password} = req.body;
 
 	if (req.session.userAuth) {
-		res.status(200).send({status: false, message: "already logged in"});
+		res.status(200).send({status: false, message: "Already logged in"});
 		return;
 	};
 
 	if (!username || !password) {
-		res.status(200).send({status: false, message: "please provide all fields"});
+		res.status(200).send({status: false, message: "Please provide all fields"});
 		return;
 	};
 
@@ -73,14 +73,14 @@ export const loginCtrl = async (req: Request, res: Response) => {
 		const userFound = await User.findOne({username});
 
 		if (!userFound) {
-		  res.status(200).send({status: false, message: "wrong username or password"});
+		  res.status(200).send({status: false, message: "Wrong username or password"});
 			return;
 		};
 
 		const correctPassword = await bcrypt.compare(password, userFound.password);
 
 		if (!correctPassword) {
-		  res.status(200).send({status: false, message: "wrong username or password"});
+		  res.status(200).send({status: false, message: "Wrong username or password"});
 			return;
 		};
 
@@ -112,7 +112,7 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 		const user = await User.findById(req.session.userAuth);
 
 		if (!user) {
-		  res.status(200).json({status: false, message:"user not found"});
+		  res.status(200).json({status: false, message:"User not found"});
 			return;
 		};
 
@@ -160,7 +160,7 @@ export const updateProfileCtrl = async (req: Request, res: Response) => {
 			return;
 		};
 
-		const newUser = await user.updateOne(
+		await user.updateOne(
 			{
 				fullname,
 				username,

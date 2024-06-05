@@ -13,11 +13,11 @@ const Homepage: React.FC = () => {
         if (entry.isIntersecting && imageRefs.current[index]) {
           imageRefs.current[index].classList.add("in-view");
           animateText(pRefs.current[index]);
-		  pRefs.current[index].style.opacity = "1";
-		  h1Refs.current[index].style.opacity = "1"
+		      pRefs.current[index].style.opacity = "1";
+		      h1Refs.current[index].style.opacity = "1"
         } else if (imageRefs.current[index]) {
-		  h1Refs.current[index].style.opacity = "0";
-		  pRefs.current[index].style.opacity = "0";
+		      h1Refs.current[index].style.opacity = "0";
+		      pRefs.current[index].style.opacity = "0";
           imageRefs.current[index].classList.remove("in-view");
         }
       });
@@ -31,7 +31,7 @@ const Homepage: React.FC = () => {
       });
     };
 
-	let observer:IntersectionObserver;
+	  let observer:IntersectionObserver;
     for (let i = 0; i < imageRefs.current.length; i++) {
       observer = createObserver(i);
       if (imageRefs.current[i]) {

@@ -26,6 +26,8 @@ const Profile: React.FC = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const emailButtonRef = useRef<HTMLButtonElement>(null);
 
+  const errorRef = useRef<HTMLDivElement>(null);
+
   if (!authContext) {
     throw new Error("authContext missing")
   };
@@ -37,7 +39,7 @@ const Profile: React.FC = () => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get("/api/user/");
+      const response = await axios.get("http://localhost:80/api/user/");
       if (response.data.status) {
         setUser(response.data.user);
       } else {
@@ -55,12 +57,18 @@ const Profile: React.FC = () => {
 
   const updateProfile = async (user:User) => {
     try {
-      const response = await axios.post("/api/user/update", user);
+      const response = await axios.post("http://localhost:80/api/user/update", user);
 
       if (response.data.status) {
         setUser(response.data.user);
       } else {
         setUser(null);
+        
+        if (errorRef.current) {
+          errorRef.current.innerHTML = response.data.message;
+          errorRef.current.style.display = "block";
+        };
+
         return;
       };
     } catch (error) {
@@ -75,11 +83,12 @@ const Profile: React.FC = () => {
     buttonRef: React.RefObject<HTMLButtonElement>, 
     confirmButton: boolean, 
     setConfirmButton: React.Dispatch<React.SetStateAction<boolean>> ) => {
-    if (!textRef.current || !inputRef.current || !buttonRef.current || !user) {
+    if (!textRef.current || !inputRef.current || !buttonRef.current || !user || !errorRef.current) {
       return;
     };
 
     if (confirmButton) {
+      errorRef.current.style.display = "none";
       const jsonData = {
         ...user,
         [property]: inputRef.current.value,
@@ -91,7 +100,9 @@ const Profile: React.FC = () => {
       inputRef.current.style.display = "none";
       buttonRef.current.textContent = "Change";
 
+      inputRef.current.value = user[property];
       setConfirmButton(false);
+
     } else {
       textRef.current.style.display = "none";
       inputRef.current.style.display = "inline";
@@ -104,34 +115,28 @@ const Profile: React.FC = () => {
   return (
     <div className="Profilepage">
       <div className="profile-container">
-
+        <div className="errorDiv" ref={errorRef}>
+        </div>
         <div className="info-container">
-          <div>
-            <label>Name: </label>
-            <label className="info-label" ref={fullnameTextRef}>{user?.fullname}</label>
-            <input ref={fullnameInputRef} type="text" className="change-input" defaultValue={user?.fullname}/>
-          </div>
+          <label>Name: </label>
+          <label className="info-label" ref={fullnameTextRef}>{user?.fullname}</label>
+          <input ref={fullnameInputRef} type="text" className="change-input" defaultValue={user?.fullname}/>
           <button ref={fullnameButtonRef} className="change-button" onClick={() => {changeProperty("fullname", fullnameTextRef, fullnameInputRef, fullnameButtonRef, fullnameConfirm, setFullnameConfirm)}}>Change</button>
         </div>
 
         <div className="info-container">
-          <div>
-            <label>Username: </label>
-            <label ref={usernameTextRef} className="info-label" >{user?.username}</label>
-            <input ref={usernameInputRef} type="text" className="change-input" defaultValue={user?.username}/>
-          </div>
+          <label>Username: </label>
+          <label ref={usernameTextRef} className="info-label" >{user?.username}</label>
+          <input ref={usernameInputRef} type="text" className="change-input" defaultValue={user?.username}/>
           <button ref={usernameButtonRef} className="change-button" onClick={()=>{changeProperty("username", usernameTextRef, usernameInputRef, usernameButtonRef, usernameConfirm, setUsernameConfirm)}}>Change</button>
         </div>
 
         <div className="info-container">
-          <div>
-            <label>Email: </label>
-            <label ref={emailTextRef} className="info-label" >{user?.email}</label>
-            <input ref={emailInputRef} type="text" className="change-input" defaultValue={user?.email}/>
-          </div>
+          <label>Email: </label>
+          <label ref={emailTextRef} className="info-label" >{user?.email}</label>
+          <input ref={emailInputRef} type="text" className="change-input" defaultValue={user?.email}/>
           <button ref={emailButtonRef} className="change-button" onClick={()=>{changeProperty("email", emailTextRef, emailInputRef, emailButtonRef, emailConfirm, setEmailConfirm)}}>Change</button>
         </div>
-
       </div>
     </div>
   );
