@@ -1,6 +1,7 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
+import { uploadImage } from "../../utils/cloudinary";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -181,4 +182,27 @@ export const updateProfileCtrl = async (req: Request, res: Response) => {
 		res.status(400).send("server error");
 		return;
 	};
+};
+
+export const profileImageUploadCtrl = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.session.userAuth);
+
+    if (!user) {
+      res.status(200).json({status:false, message: "User not found"});
+      return;
+    };
+
+    if (req.file) {
+      await user.updateOne({
+        profilePicture: req.file.path
+      }, {new:true});
+
+      res.status(200).json({status:true, path: req.file.path});
+    };
+  } catch (error) {
+    res.status(200).json({status:false});
+    console.log(error);
+    return;
+  };
 };
