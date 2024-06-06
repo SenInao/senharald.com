@@ -112,6 +112,10 @@ const Profile: React.FC = () => {
     };
   };
 
+  const profilePicChange = () => {
+    navigate("/profile/upload-picture");
+  };
+
   return (
     <div className="Profilepage">
       <div className="profile-container">
@@ -136,6 +140,11 @@ const Profile: React.FC = () => {
           <label ref={emailTextRef} className="info-label" >{user?.email}</label>
           <input ref={emailInputRef} type="text" className="change-input" defaultValue={user?.email}/>
           <button ref={emailButtonRef} className="change-button" onClick={()=>{changeProperty("email", emailTextRef, emailInputRef, emailButtonRef, emailConfirm, setEmailConfirm)}}>Change</button>
+        </div>
+
+        <div className="info-container">
+          <label>ProfilePicture: </label>
+          <button className="change-button" onClick={profilePicChange}>Change</button>
         </div>
       </div>
     </div>

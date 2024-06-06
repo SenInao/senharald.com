@@ -1,7 +1,6 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
-import { uploadImage } from "../../utils/cloudinary";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -46,6 +45,7 @@ export const registerCtrl = async (req: Request, res: Response) => {
       fullname: user.fullname,
       username: user.username,
       email: user.email,
+      profilePicture:user.profilePicture,
     };
 
 		res.status(200).json({status: true, user:jsonUser});
@@ -91,6 +91,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
       fullname: userFound.fullname,
       username: userFound.username,
       email: userFound.email,
+      profilePicture:userFound.profilePicture,
     };
 
 		res.status(200).json({status: true, user:jsonUser});
@@ -121,6 +122,7 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
       fullname: user.fullname,
       username: user.username,
       email: user.email,
+      profilePicture:user.profilePicture,
     };
 
 		res.status(200).json({status: true, user:jsonUser});
@@ -173,6 +175,7 @@ export const updateProfileCtrl = async (req: Request, res: Response) => {
       fullname:fullname,
       username:username,
       email:email,
+      profilePicture:user.profilePicture,
     };
 		
 		res.status(200).json({status:true, user:jsonData});

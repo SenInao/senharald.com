@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     throw new Error("authcontext error!")
   };
 
-  const {loggedIn, setLoggedIn, setUser} = authContext;
+  const {loggedIn, setLoggedIn, setUser, user} = authContext;
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -36,6 +36,8 @@ const Navbar: React.FC = () => {
     };
   };
 
+  console.log(user);
+
   return (
 		<nav>
 			<div className="sitenav">
@@ -48,7 +50,7 @@ const Navbar: React.FC = () => {
         {loggedIn ? (
           <ul>
 					  <button className="navbar-toggle" onClick={toggleMenu}>
-						  <CgProfile size={50}/>
+              {user?.profilePicture ? <img src={user.profilePicture}/> : <CgProfile size={50}/>}
 					  </button>
 					  <li className={isOpen ? "open" : "closed"}><a href="/profile">Profile</a></li>
 					  <li className={isOpen ? "open" : "closed"}><a href="/" onClick={logout}>Logout</a></li>
