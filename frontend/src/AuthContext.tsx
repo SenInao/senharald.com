@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode, FC } from 'react';
 import axios from 'axios';
+import { checkLogin } from './components/checkLogin';
 
 axios.defaults.withCredentials = true;
 
@@ -28,23 +29,15 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await axios.get('http://localhost:80/api/user');
-        if (response.data.status) {
-          setLoggedIn(true);
-          setUser(response.data.user);
-        } else {
-          setLoggedIn(false);
-          setUser(null);
-        }
-      } catch (error) {
-        setLoggedIn(false);
+    checkLogin().then(result => {
+      if (result.success) {
+        setUser(result.user);
+        setLoggedIn(true);
+      } else {
         setUser(null);
-      }
-    };
-
-    checkSession();
+        setLoggedIn(false);
+      };
+    });
   }, []);
 
   return (

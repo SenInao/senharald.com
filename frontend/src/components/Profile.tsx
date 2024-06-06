@@ -3,6 +3,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
+import { checkLogin } from "./checkLogin";
 
 interface User {
   fullname: string;
@@ -37,22 +38,20 @@ const Profile: React.FC = () => {
   const [fullnameConfirm, setFullnameConfirm] = useState(false);
   const [emailConfirm, setEmailConfirm] = useState(false);
 
-  const getUser = async () => {
-    try {
-      const response = await axios.get("http://localhost:80/api/user/");
-      if (response.data.status) {
-        setUser(response.data.user);
-      } else {
-        navigate("/login")
-      };
-    } catch (error) {
-      return;
-    };
-  };
-
-
   useEffect(()=> {
-    getUser();
+    checkLogin().then(result => {
+      if (!result.success) {
+        navigate("/login")
+      } else {
+        if (!authContext) {
+          return;
+        };
+
+        const {setLoggedIn, setUser} = authContext;
+        setLoggedIn(true);
+        setUser(result.user);
+      };
+    });
   });
 
   const updateProfile = async (user:User) => {

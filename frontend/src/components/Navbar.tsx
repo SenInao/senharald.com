@@ -16,7 +16,6 @@ const Navbar: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleMenu = () => {
-		console.log("button")
 		setIsOpen(!isOpen);
 	};
 
@@ -35,8 +34,6 @@ const Navbar: React.FC = () => {
       console.log("error!")
     };
   };
-
-  console.log(user);
 
   return (
 		<nav>

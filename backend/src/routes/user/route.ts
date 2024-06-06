@@ -2,6 +2,7 @@ import express from "express";
 import {registerCtrl, loginCtrl, logoutCtrl, userProfileCtrl, updateProfileCtrl, profileImageUploadCtrl} from "../../controllers/user/controller";
 import authenticate from "../../middlewares/authenticate";
 import uploadMiddleware from "../../middlewares/uploadImage";
+import { deletePrevious } from "../../middlewares/delProfilePic";
 
 const upload = uploadMiddleware("profilePictures");
 
@@ -23,6 +24,6 @@ userApiRoutes.post("/update", authenticate, updateProfileCtrl);
 userApiRoutes.get("/", authenticate, userProfileCtrl);
 
 //Profile photo upload
-userApiRoutes.post("/profile-photo-upload", authenticate, upload.single("profile"), profileImageUploadCtrl);
+userApiRoutes.post("/profile-photo-upload", authenticate, deletePrevious, upload.single("profile"), profileImageUploadCtrl);
 
 export default userApiRoutes;

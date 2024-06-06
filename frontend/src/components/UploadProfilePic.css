@@ -18,6 +18,21 @@
 }
 
 .upload-container button {
-  margin: 2rem;
+  margin: 3rem;
+  font-size: 1.2rem;
+
+  width: 7rem;
+  height: 3rem;
+}
+
+#error-label {
+  color: darkred;
   font-size: 1.5rem;
+  display: none;
+}
+
+#checking-label {
+  margin: 3rem;
+  font-size: 1.5rem;
+  display: none;
 }
