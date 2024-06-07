@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
 			<div className="sitenav">
 				<ul>
 					<li><a href="/">Home</a></li>
-					<li><a href="/">About</a></li>
+					<li><a href="http://github.com/SenInao">GitHub</a></li>
 				</ul>
 			</div>
 			<div className="usernav">
