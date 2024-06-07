@@ -65,7 +65,7 @@ const UploadProfilePic:React.FC = () => {
           checkingLabelRef.current.style.display = "block";
           buttonRef.current.style.display = "none";
         }
-        const response = await axios.post("http://localhost:80/api/user/profile-photo-upload", formData, {
+        const response = await axios.post("/api/user/profile-photo-upload", formData, {
           headers: {
             "Content-Type":"multipart/form-data"
           }

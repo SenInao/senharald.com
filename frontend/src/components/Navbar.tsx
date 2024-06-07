@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
 
   const logout = async () => {
     try {
-      const response = await axios.post('http://localhost:80/api/user/logout');
+      const response = await axios.post('/api/user/logout');
       if (response.data.status) {
         setLoggedIn(false);
         setUser(null);
