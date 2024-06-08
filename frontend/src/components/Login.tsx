@@ -36,7 +36,7 @@ const Login: React.FC = () => {
       buttonRef.current.style.animation = "none";
       waitingRef.current.style.display = "block";
 
-      const response = await axios.post('/api/user/login', jsonData);
+      const response = await axios.post('http://localhost:80/api/user/login', jsonData);
 
       buttonRef.current.style.display = "block";
       waitingRef.current.style.display = "none";

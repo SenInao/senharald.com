@@ -56,7 +56,7 @@ const Profile: React.FC = () => {
 
   const updateProfile = async (user:User) => {
     try {
-      const response = await axios.post("/api/user/update", user);
+      const response = await axios.post("http://localhost:80/api/user/update", user);
 
       if (response.data.status) {
         setUser(response.data.user);
