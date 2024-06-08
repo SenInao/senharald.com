@@ -42,7 +42,7 @@ const Register: React.FC = () => {
       waitingRef.current.style.display = "block"; 
       buttonRef.current.style.animation = "none";
 
-      const response = await axios.post("http://localhost:80/api/user/register", jsonData);
+      const response = await axios.post("/api/user/register", jsonData);
 
       waitingRef.current.style.display = "none"; 
       buttonRef.current.style.display = "block"; 
