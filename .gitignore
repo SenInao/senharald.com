@@ -8,6 +8,8 @@ server.js
 /coverage
 
 /build
+/frontend/build
+/nohup.out
 
 .DS_Store
 .env.local
