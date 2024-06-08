@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from "../AuthContext";
 import "./Navbar.css"
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -10,6 +11,8 @@ const Navbar: React.FC = () => {
   if (!authContext) {
     throw new Error("authcontext error!")
   };
+
+  const navigate = useNavigate();
 
   const {loggedIn, setLoggedIn, setUser, user} = authContext;
 
@@ -22,9 +25,11 @@ const Navbar: React.FC = () => {
   const logout = async () => {
     try {
       const response = await axios.post('/api/user/logout');
+      console.log(response.data);
       if (response.data.status) {
         setLoggedIn(false);
         setUser(null);
+        navigate("/");
       } else {
         console.log(response.data.message);
         setLoggedIn(false);
@@ -40,7 +45,7 @@ const Navbar: React.FC = () => {
 			<div className="sitenav">
 				<ul>
 					<li><a href="/">Home</a></li>
-					<li><a href="http://github.com/SenInao">GitHub</a></li>
+					<li><a href="https://github.com/SenInao">GitHub</a></li>
 				</ul>
 			</div>
 			<div className="usernav">
