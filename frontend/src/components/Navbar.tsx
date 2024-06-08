@@ -25,6 +25,7 @@ const Navbar: React.FC = () => {
   const logout = async () => {
     try {
       const response = await axios.post('/api/user/logout');
+      console.log(response.data);
       if (response.data.status) {
         setLoggedIn(false);
         setUser(null);
@@ -44,7 +45,7 @@ const Navbar: React.FC = () => {
 			<div className="sitenav">
 				<ul>
 					<li><a href="/">Home</a></li>
-					<li><a href="http://github.com/SenInao">GitHub</a></li>
+					<li><a href="https://github.com/SenInao">GitHub</a></li>
 				</ul>
 			</div>
 			<div className="usernav">
