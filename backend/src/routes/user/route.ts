@@ -1,5 +1,5 @@
 import express from "express";
-import {registerCtrl, loginCtrl, logoutCtrl, userProfileCtrl, updateProfileCtrl, profileImageUploadCtrl} from "../../controllers/user/controller";
+import {registerCtrl, loginCtrl, logoutCtrl, userProfileCtrl, updateProfileCtrl, profileImageUploadCtrl, addFriendCtrl, removeFriendCtrl} from "../../controllers/user/controller";
 import authenticate from "../../middlewares/authenticate";
 import uploadMiddleware from "../../middlewares/uploadImage";
 import { deletePrevious } from "../../middlewares/delProfilePic";
@@ -25,5 +25,11 @@ userApiRoutes.get("/", authenticate, userProfileCtrl);
 
 //Profile photo upload
 userApiRoutes.post("/profile-photo-upload", authenticate, deletePrevious, upload.single("profile"), profileImageUploadCtrl);
+
+//Add friend
+userApiRoutes.post("/add-friend", authenticate, addFriendCtrl);
+
+//Remove friend
+userApiRoutes.post("/remove-friend", authenticate, removeFriendCtrl);
 
 export default userApiRoutes;
