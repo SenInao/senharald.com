@@ -94,6 +94,7 @@ export const loginCtrl = async (req: Request, res: Response) => {
       profilePicture:userFound.profilePicture,
     };
 
+    console.log(req.session.userAuth)
 		res.status(200).json({status: true, user:jsonUser});
 		return;
 	} catch (error) {
@@ -111,7 +112,10 @@ export const logoutCtrl = async (req: Request, res: Response) => {
 
 export const userProfileCtrl = async (req: Request, res: Response) => {
 	try {
-		const user = await User.findById(req.session.userAuth);
+		const user = await User.findById(req.session.userAuth).populate({
+      path: "friends",
+      select: "-password"
+    }).lean()
 
 		if (!user) {
 		  res.status(200).json({status: false, message:"User not found"});
@@ -123,6 +127,8 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
       username: user.username,
       email: user.email,
       profilePicture:user.profilePicture,
+      chats: user.chats,
+      friends: user.friends
     };
 
 		res.status(200).json({status: true, user:jsonUser});
@@ -210,3 +216,102 @@ export const profileImageUploadCtrl = async (req: Request, res: Response) => {
   };
 };
 
+export const addFriendCtrl = async (req: Request, res: Response) => {
+  const {username} = req.body
+
+  if (!username) {
+    res.status(200).json({status:false, message:"Please provide a username"})
+  }
+  try {
+    const user = await User.findById(req.session.userAuth)
+    const friend = await User.findOne({username})
+
+    if (!user) {
+      res.status(200).json({status:false, message:"User not found"});
+      return;
+    }
+    
+    if (!friend) {
+      res.status(200).json({status:false, message:"No user with requested username"})
+      return;
+    }
+
+    if (user.username == username) {
+      res.status(200).json({status:false, message:"Cannot add yourself as a friend ;)"})
+      return;
+    }
+
+    for (let i = 0; i < user.friends.length; i++) {
+      if (friend.id == user.friends[i]) {
+        res.status(200).json({status:false, message:"Already friends with this user"})
+        return;
+      }
+    }
+
+    const friends = user.friends
+
+    const updatedFriends = [...friends, friend.id]
+
+    await user.updateOne(
+      {
+        friends: updatedFriends
+      },
+      {new:true}
+    )
+
+    res.status(200).json({status:true})
+    return;
+  } catch (error) {
+    res.status(200).json({status:false});
+    console.log(error);
+    return;
+  };
+};
+
+
+export const removeFriendCtrl = async (req:Request, res:Response) => {
+  const {username} = req.body
+
+  if (!username) {
+    res.status(200).json({status:false, message:"Please provide a username"})
+  }
+
+  try {
+    const user = await User.findById(req.session.userAuth)
+
+    if(!user) {
+      res.status(200).json({status:false, message:"User not found"})
+      return
+    }
+
+    for (let i = 0; i < user.friends.length; i++) {
+      const friend = await User.findById(user.friends[i])
+
+      if (!friend) {
+        res.status(200).json({status:false, message:"No user with requested username"})
+        return
+      }
+
+      if (friend.username == username) {
+        const friends = user.friends
+
+        friends.splice(i, 1)
+
+        await user.updateOne({
+          friends: friends
+        })
+
+        res.status(200).json({status:true})
+        return
+      }
+    }
+    
+    res.status(200).json({status:false, message:"Friend not found"})
+    return
+
+  } catch (error) {
+    res.status(200).json({status:false});
+    console.log(error);
+    return;
+  }
+}
