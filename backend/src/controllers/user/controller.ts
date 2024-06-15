@@ -1,6 +1,8 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
+import "../../models/chat"
+import Chat from "../../models/chat";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -94,7 +96,6 @@ export const loginCtrl = async (req: Request, res: Response) => {
       profilePicture:userFound.profilePicture,
     };
 
-    console.log(req.session.userAuth)
 		res.status(200).json({status: true, user:jsonUser});
 		return;
 	} catch (error) {
@@ -112,10 +113,14 @@ export const logoutCtrl = async (req: Request, res: Response) => {
 
 export const userProfileCtrl = async (req: Request, res: Response) => {
 	try {
-		const user = await User.findById(req.session.userAuth).populate({
-      path: "friends",
-      select: "-password"
-    }).lean()
+		const user = await User.findById(req.session.userAuth)
+      .populate({
+        path: "friends",
+        select: "-password"
+      })
+      .populate({
+        path: "chats"
+      }).lean()
 
 		if (!user) {
 		  res.status(200).json({status: false, message:"User not found"});
@@ -123,6 +128,7 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 		};
 
     const jsonUser = {
+      id: user._id,
       fullname: user.fullname,
       username: user.username,
       email: user.email,
@@ -258,6 +264,20 @@ export const addFriendCtrl = async (req: Request, res: Response) => {
       },
       {new:true}
     )
+
+    const chat = await Chat.create({
+      title: friend.username + " " + user.username,
+      users: [user.id, friend.id],
+      messages: [],
+    })
+
+    chat.save({validateBeforeSave:false})
+
+    const userChats = [...user.chats, chat]
+    const friendChats = [...friend.chats, chat]
+
+    await user.updateOne({chats: userChats})
+    await friend.updateOne({chats: friendChats})
 
     res.status(200).json({status:true})
     return;
