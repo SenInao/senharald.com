@@ -1,6 +1,7 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
+import "../../models/message"
 import "../../models/chat"
 import Chat from "../../models/chat";
 
@@ -119,7 +120,10 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
         select: "-password"
       })
       .populate({
-        path: "chats"
+        path: "chats",
+        populate: {
+          path: "messages"
+        }
       }).lean()
 
 		if (!user) {
