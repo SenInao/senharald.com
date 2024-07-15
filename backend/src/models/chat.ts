@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 
 const chatSchema = new mongoose.Schema(
   {
+    dm: Boolean,
     title: String,
     users: [
       {
