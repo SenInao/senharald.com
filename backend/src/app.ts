@@ -3,7 +3,7 @@ import userApiRoutes from "./routes/user/route"
 import dbConnect from './config/db';
 import dotenv from "dotenv";
 import configureSessions from './config/session';
-import cors from "cors";
+//import cors from "cors";
 
 //enable environment
 dotenv.config();
@@ -22,12 +22,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 //CORS
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true
-};
+//const corsOptions = {
+// origin: 'http://localhost:3000',
+// credentials: true
+//};
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
 //express-session
 configureSessions(app);
