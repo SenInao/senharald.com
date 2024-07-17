@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    user: {
+    chatId: {
+      type: mongoose.Schema.ObjectId,
+      required: true,
+      ref: "Chat"
+    },
+    author: {
       type: mongoose.Schema.ObjectId,
       required:true,
       ref:"User"
@@ -11,8 +16,7 @@ const messageSchema = new mongoose.Schema(
       type:String,
       required:true
     },
-    timestamp: Date
-  }
+  }, {timestamps:true}
 )
 
 const Message = mongoose.model("Message", messageSchema)

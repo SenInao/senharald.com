@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import "../../models/message"
 import "../../models/chat"
 import Chat from "../../models/chat";
+import { populate } from "dotenv";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -127,7 +128,13 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
         path: "chats",
         populate: [
           {
-            path: "messages"
+            path: "messages",
+            populate: [
+              {
+                path: "author",
+                select: "username -_id"
+              }
+            ]
           },
           {
             path: "users",
