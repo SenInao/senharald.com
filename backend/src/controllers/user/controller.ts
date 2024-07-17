@@ -1,6 +1,10 @@
 import { Request, Response} from "express";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
+import "../../models/message"
+import "../../models/chat"
+import Chat from "../../models/chat";
+import { populate } from "dotenv";
 
 export const registerCtrl = async (req: Request, res: Response) => {
 	const {fullname, username, email, password} = req.body;
@@ -94,7 +98,6 @@ export const loginCtrl = async (req: Request, res: Response) => {
       profilePicture:userFound.profilePicture,
     };
 
-    console.log(req.session.userAuth)
 		res.status(200).json({status: true, user:jsonUser});
 		return;
 	} catch (error) {
@@ -112,10 +115,33 @@ export const logoutCtrl = async (req: Request, res: Response) => {
 
 export const userProfileCtrl = async (req: Request, res: Response) => {
 	try {
-		const user = await User.findById(req.session.userAuth).populate({
-      path: "friends",
-      select: "-password"
-    }).lean()
+		const user = await User.findById(req.session.userAuth)
+      .populate({
+        path: "friends",
+        select: "username -_id"
+      })
+      .populate({
+        path: "friendRequests",
+        select: "username -_id"
+      })
+      .populate({
+        path: "chats",
+        populate: [
+          {
+            path: "messages",
+            populate: [
+              {
+                path: "author",
+                select: "username -_id"
+              }
+            ]
+          },
+          {
+            path: "users",
+            select: "username -_id"
+          }
+        ]
+      }).lean()
 
 		if (!user) {
 		  res.status(200).json({status: false, message:"User not found"});
@@ -123,12 +149,14 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
 		};
 
     const jsonUser = {
+      id: user._id,
       fullname: user.fullname,
       username: user.username,
       email: user.email,
       profilePicture:user.profilePicture,
       chats: user.chats,
-      friends: user.friends
+      friends: user.friends,
+      friendRequests: user.friendRequests
     };
 
 		res.status(200).json({status: true, user:jsonUser});
@@ -216,7 +244,7 @@ export const profileImageUploadCtrl = async (req: Request, res: Response) => {
   };
 };
 
-export const addFriendCtrl = async (req: Request, res: Response) => {
+export const createFriendRequest = async (req: Request, res: Response) => {
   const {username} = req.body
 
   if (!username) {
@@ -224,40 +252,35 @@ export const addFriendCtrl = async (req: Request, res: Response) => {
   }
   try {
     const user = await User.findById(req.session.userAuth)
-    const friend = await User.findOne({username})
+    const friend = await User.findOne({username: username})
 
     if (!user) {
       res.status(200).json({status:false, message:"User not found"});
       return;
     }
-    
     if (!friend) {
       res.status(200).json({status:false, message:"No user with requested username"})
       return;
     }
-
     if (user.username == username) {
       res.status(200).json({status:false, message:"Cannot add yourself as a friend ;)"})
       return;
     }
-
-    for (let i = 0; i < user.friends.length; i++) {
-      if (friend.id == user.friends[i]) {
-        res.status(200).json({status:false, message:"Already friends with this user"})
-        return;
-      }
+    if (user.friends.includes(friend.id)) {
+      res.status(200).json({status:false, message:"Already friends with this user"})
+      return
+    }
+    if (friend.friendRequests.includes(user.id)) {
+      res.status(200).json({status:false, message:"Already sent friend request"})
+      return
+    }
+    if (user.friendRequests.includes(friend.id)) {
+      res.status(200).json({status:false, message:"Already received request from that user"})
+      return
     }
 
-    const friends = user.friends
-
-    const updatedFriends = [...friends, friend.id]
-
-    await user.updateOne(
-      {
-        friends: updatedFriends
-      },
-      {new:true}
-    )
+    friend.friendRequests.push(user.id)
+    await friend.save()
 
     res.status(200).json({status:true})
     return;
@@ -268,6 +291,95 @@ export const addFriendCtrl = async (req: Request, res: Response) => {
   };
 };
 
+export const acceptFriendRequestCtrl = async (req:Request, res:Response) => {
+  const {username} = req.body
+
+  if (!username) {
+    res.status(200).json({status:false, message:"Please provide a username"})
+  }
+  try {
+    const user = await User.findById(req.session.userAuth)
+    const friendToAccept = await User.findOne({username: username})
+    if (!user) {
+      res.status(200).json({status:false, message:"User not found"});
+      return;
+    }
+
+    if (!friendToAccept) {
+      res.status(200).json({status:false, message:"Friend not found"});
+      return;
+    }
+
+    if (!user.friendRequests.includes(friendToAccept.id)) {
+      res.status(200).json({status:false, message:"No friend request for that user"});
+      return;
+    }
+
+    user.friendRequests.splice(user.friendRequests.indexOf(friendToAccept.id))
+
+    user.friends.push(friendToAccept.id)
+    friendToAccept.friends.push(user.id)
+
+    const chat = await Chat.create({
+      dm: true,
+      title: "DM",
+      users: [user.id, friendToAccept.id],
+      messages: [],
+    })
+
+    await chat.save({validateBeforeSave:false})
+
+    user.chats.push(chat.id)
+    friendToAccept.chats.push(chat.id)
+
+    user.save()
+    friendToAccept.save()
+
+    res.status(200).json({status:true})
+    return;
+  } catch (error) {
+    res.status(200).json({status:false});
+    console.log(error);
+  }
+}
+
+export const declineFriendRequest = async (req:Request, res:Response) => {
+  const {username }= req.body
+
+  if (!username) {
+    res.status(200).json({status:false, message:"Please provide a username"})
+  }
+  try {
+    const user = await User.findById(req.session.userAuth)
+    const friendToDecline = await User.findOne({username: username})
+
+    
+    if (!user) {
+      res.status(200).json({status:false, message:"User not found"});
+      return;
+    }
+
+    if (!friendToDecline) {
+      res.status(200).json({status:false, message:"Friend not found"});
+      return;
+    }
+
+    if (!user.friendRequests.includes(friendToDecline.id)) {
+      res.status(200).json({status:false, message:"No friend request for that user"});
+      return;
+    }
+
+    user.friendRequests.splice(user.friendRequests.indexOf(friendToDecline.id))
+
+    user.save()
+
+    res.status(200).json({status:true})
+    return;
+  } catch (error) {
+    res.status(200).json({status:false});
+    console.log(error);
+  }
+}
 
 export const removeFriendCtrl = async (req:Request, res:Response) => {
   const {username} = req.body
