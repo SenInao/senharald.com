@@ -89,10 +89,10 @@ const Homepage: React.FC = () => {
     </header>
     <div className="Homepage-content">
       <main id='homepage-start'>
-        <img src={`${process.env.PUBLIC_URL}/assets/discord.png`} alt="Spaceship" ref={el => el && imageRefs.current.push(el)}/>
+        <img src={`${process.env.PUBLIC_URL}/assets/discord.png`} alt="Discord" ref={el => el && imageRefs.current.push(el)}/>
         <h1 ref={el => el && h1Refs.current.push(el)}>CHAT</h1>
         <p ref={el => el && pRefs.current.push(el)}>Introducing CHAT, a revolutionary platform designed to connect people from all corners of the globe through seamless and intuitive communication. With its sleek design and user-friendly interface, CHAT offers a dynamic space where users can engage in vibrant conversations, share ideas, and forge meaningful connections effortlessly. Whether you're catching up with friends, collaborating with colleagues, or meeting new people, our app provides the perfect environment for fostering dialogue and building relationships. Join the conversation today and experience the future of communication.</p>
-		<button>Check out  →</button>
+		<button onClick={() => {window.open("chat.senharald.com", "_self")}}>Check out  →</button>
       </main>
       <main>
         <img src={`${process.env.PUBLIC_URL}/assets/spaceship.jpg`} alt="Spaceship" ref={el => el && imageRefs.current.push(el)}/>
@@ -101,7 +101,7 @@ const Homepage: React.FC = () => {
 		<button>Check out  →</button>
       </main>
       <main>
-        <img src={`${process.env.PUBLIC_URL}/assets/github.png`} alt="Spaceship" ref={el => el && imageRefs.current.push(el)}/>
+        <img src={`${process.env.PUBLIC_URL}/assets/github.png`} alt="github" ref={el => el && imageRefs.current.push(el)}/>
         <h1 ref={el => el && h1Refs.current.push(el)}>OTHER</h1>
         <p ref={el => el && pRefs.current.push(el)}>Step into the realm of innovation with our diverse portfolio of projects and apps at github. From cutting-edge utilities to groundbreaking software solutions, we're dedicated to pushing the boundaries of technology to enrich lives and streamline experiences. Whether it's revolutionizing productivity, enhancing entertainment, or simplifying everyday tasks, each of our projects is meticulously crafted with a commitment to quality and user satisfaction. Join us on our journey of discovery and empowerment as we continue to shape the digital landscape and make a difference in the world, one project at a time.</p>
 		<button>Check out  →</button>
