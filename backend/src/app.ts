@@ -1,9 +1,10 @@
-import express, {Request, Response} from 'express';
+import express from 'express';
 import userApiRoutes from "./routes/user/route"
 import dbConnect from './config/db';
 import dotenv from "dotenv";
 import configureSessions from './config/session';
 import cors from "cors";
+import chatApiRoutes from './routes/chat/route';
 
 //enable environment
 dotenv.config();
@@ -23,7 +24,7 @@ app.use(express.urlencoded({extended:true}));
 
 //CORS
 const corsOptions = {
-  origin: 'http://chat.senharald.com',
+  origin: 'http://localhost:3000',
   credentials: true
 };
 
@@ -35,6 +36,10 @@ configureSessions(app);
 //connecting to database
 dbConnect();
 
+// /api/user routes
 app.use('/api/user', userApiRoutes);
+
+// /api/chat routes
+app.use('/api/chat', chatApiRoutes);
 
 export default app;

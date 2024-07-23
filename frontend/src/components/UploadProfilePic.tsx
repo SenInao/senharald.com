@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./UploadProfilePic.css"
 import { checkLogin } from "./checkLogin";
 import { AuthContext } from "../AuthContext";
+import { parentDomain } from "../constants";
 
 const UploadProfilePic:React.FC = () => {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const UploadProfilePic:React.FC = () => {
           checkingLabelRef.current.style.display = "block";
           buttonRef.current.style.display = "none";
         }
-        const response = await axios.post("/api/user/profile-photo-upload", formData, {
+        const response = await axios.post(parentDomain+"/api/user/profile-photo-upload", formData, {
           headers: {
             "Content-Type":"multipart/form-data"
           }

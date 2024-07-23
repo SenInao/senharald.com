@@ -3,6 +3,7 @@ import axios from "axios";
 import React, {useContext, useRef, useState} from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
+import { parentDomain } from "../constants";
 
 const Register: React.FC = () => {
   const fullnameRef = useRef<HTMLInputElement>(null);
@@ -42,7 +43,7 @@ const Register: React.FC = () => {
       waitingRef.current.style.display = "block"; 
       buttonRef.current.style.animation = "none";
 
-      const response = await axios.post("/api/user/register", jsonData);
+      const response = await axios.post(parentDomain+"/api/user/register", jsonData);
 
       waitingRef.current.style.display = "none"; 
       buttonRef.current.style.display = "block"; 

@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
 import { checkLogin } from "./checkLogin";
+import { parentDomain } from "../constants";
 
 interface User {
   fullname: string;
@@ -56,7 +57,7 @@ const Profile: React.FC = () => {
 
   const updateProfile = async (user:User) => {
     try {
-      const response = await axios.post("/api/user/update", user);
+      const response = await axios.post(parentDomain+"/api/user/update", user);
 
       if (response.data.status) {
         setUser(response.data.user);
