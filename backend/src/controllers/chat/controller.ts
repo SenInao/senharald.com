@@ -255,7 +255,12 @@ export const addFriendToChatCtrl = async (req: Request, res: Response) => {
     }
 
     if (user.friends.indexOf(friendObj._id) === -1) {
-      res.status(200).json({status: false, message: "not friends with this user"})
+      res.status(200).json({status: false, message: "friend not found"})
+      return 
+    }
+
+    if (chat.users.indexOf(friendObj._id) !== -1) {
+      res.status(200).json({status: false, message: "user already in group"})
       return 
     }
 

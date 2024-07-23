@@ -21,6 +21,9 @@ const configureSessions = (app:express.Application) => {
 				mongoUrl:mongoUrl,
 				ttl: 14 * 24 * 60 * 60,
 			}),
+      cookie: {
+        maxAge: 14 * 24 * 60 * 60 * 1000
+      }
 		})
 	);
 };
