@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended:true}));
 
 //CORS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://chat.senharald.com',
   credentials: true
 };
 

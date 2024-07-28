@@ -49,7 +49,7 @@ const Login: React.FC = () => {
         setLoggedIn(true);
         setUser(response.data.user);
         if (redirect) {
-          window.location.href = "https://" + redirect
+          window.location.href = "http://" + redirect
           return
         }
         navigate("/profile");

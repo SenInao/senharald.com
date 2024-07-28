@@ -1,1 +1,1 @@
-export const parentDomain = "http://localhost:80"
+export const parentDomain = "http://senharald.com"
