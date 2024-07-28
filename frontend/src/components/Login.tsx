@@ -3,7 +3,7 @@ import axios from "axios";
 import React, {useRef, useState} from "react";
 import { useContext } from 'react';
 import { AuthContext } from "../AuthContext";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import { parentDomain } from "../constants";
 
 const Login: React.FC = () => {
@@ -21,6 +21,9 @@ const Login: React.FC = () => {
   const {setLoggedIn, setUser} = authContext;
   const [loginError, setError] = useState(String);
   const navigate = useNavigate();
+
+  const search = useLocation().search
+  const redirect = new URLSearchParams(search).get("redirect")
 
   const login = async () => {
     if (!usernameRef.current || !passwordRef.current || !buttonRef.current || !waitingRef.current || !errorRef.current) {
@@ -45,6 +48,10 @@ const Login: React.FC = () => {
       if (response.data.status) {
         setLoggedIn(true);
         setUser(response.data.user);
+        if (redirect) {
+          window.location.href = "https://" + redirect
+          return
+        }
         navigate("/profile");
       } else {
         errorRef.current.style.display = "block";

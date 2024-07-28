@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const messageSchema = new mongoose.Schema(
   {
@@ -16,6 +17,12 @@ const messageSchema = new mongoose.Schema(
       type:String,
       required:true
     },
+    usersRead: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User"
+      }
+    ]
   }, {timestamps:true}
 )
 

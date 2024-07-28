@@ -2,7 +2,7 @@ import "./Register.css";
 import axios from "axios";
 import React, {useContext, useRef, useState} from "react";
 import { AuthContext } from "../AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { parentDomain } from "../constants";
 
 const Register: React.FC = () => {
@@ -21,6 +21,9 @@ const Register: React.FC = () => {
 
   const {setLoggedIn, setUser} = authContext;
   const navigate = useNavigate();
+
+  const search = useLocation().search
+  const redirect = new URLSearchParams(search).get("redirect")
 
   const [registerError, setError] = useState(String);
 
@@ -52,6 +55,9 @@ const Register: React.FC = () => {
       if (response.data.status) {
         setLoggedIn(true);
         setUser(response.data.user);
+        if (redirect) {
+          window.location.href = "https://" + redirect
+        }
         navigate("/profile");
       } else {
         errorRef.current.style.display = "block"
