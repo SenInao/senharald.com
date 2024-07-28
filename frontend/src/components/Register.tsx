@@ -56,7 +56,7 @@ const Register: React.FC = () => {
         setLoggedIn(true);
         setUser(response.data.user);
         if (redirect) {
-          window.location.href = "https://" + redirect
+          window.location.href = "http://" + redirect
         }
         navigate("/profile");
       } else {
