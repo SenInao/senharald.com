@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended:true}));
 
 //CORS
 const corsOptions = {
-  origin: 'http://chat.senharald.com',
+  origin: process.env.CORS_DOMAIN,
   credentials: true
 };
 
