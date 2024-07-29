@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UploadProfilePic.css"
-import { checkLogin } from "./checkLogin";
 import { AuthContext } from "../AuthContext";
 import { parentDomain } from "../constants";
 
@@ -10,23 +9,10 @@ const UploadProfilePic:React.FC = () => {
   const navigate = useNavigate();
 
   const auth = useContext(AuthContext);
-
-
-  useEffect(()=> {
-    checkLogin().then(result => {
-      if (!result.success) {
-        navigate("/login")
-      } else {
-        if (!auth) {
-          return;
-        };
-
-        const {setLoggedIn, setUser} = auth;
-        setLoggedIn(true);
-        setUser(result.user);
-      };
-    });
-  });
+  if (!auth) {
+    throw new Error("AuthContext missing")
+  }
+  const {user} = auth
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const errorLabelRef = useRef<HTMLLabelElement>(null);
@@ -88,6 +74,16 @@ const UploadProfilePic:React.FC = () => {
       buttonRef.current.style.display = "block";
     };
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/")
+    }
+  })
+
+  if (!user) {
+    return <div></div>
+  }
 
   return (
     <div className="UploadProfilePicPage">

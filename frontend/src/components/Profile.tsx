@@ -3,7 +3,6 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
-import { checkLogin } from "./checkLogin";
 import { parentDomain } from "../constants";
 
 interface User {
@@ -13,7 +12,6 @@ interface User {
 };
 
 const Profile: React.FC = () => {
-  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
   const fullnameTextRef = useRef<HTMLLabelElement>(null);
@@ -30,6 +28,7 @@ const Profile: React.FC = () => {
 
   const errorRef = useRef<HTMLDivElement>(null);
 
+  const authContext = useContext(AuthContext);
   if (!authContext) {
     throw new Error("authContext missing")
   };
@@ -38,22 +37,6 @@ const Profile: React.FC = () => {
   const [usernameConfirm, setUsernameConfirm] = useState(false);
   const [fullnameConfirm, setFullnameConfirm] = useState(false);
   const [emailConfirm, setEmailConfirm] = useState(false);
-
-  useEffect(()=> {
-    checkLogin().then(result => {
-      if (!result.success) {
-        navigate("/login")
-      } else {
-        if (!authContext) {
-          return;
-        };
-
-        const {setLoggedIn, setUser} = authContext;
-        setLoggedIn(true);
-        setUser(result.user);
-      };
-    });
-  });
 
   const updateProfile = async (user:User) => {
     try {
@@ -116,6 +99,16 @@ const Profile: React.FC = () => {
     navigate("/profile/upload-picture");
   };
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/")
+    }
+  })
+
+  if (!user) {
+    return <div></div>
+  }
+  
   return (
     <div className="Profilepage">
       <div className="profile-container">

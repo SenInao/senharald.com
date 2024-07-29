@@ -41,6 +41,7 @@ const Navbar: React.FC = () => {
     };
   };
 
+
   return (
 		<nav>
 			<div className="sitenav">

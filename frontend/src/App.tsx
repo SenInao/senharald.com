@@ -5,9 +5,22 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 import UploadProfilePic from "./components/UploadProfilePic";
+import {useContext} from "react"
 import "./App.css"
+import { AuthContext } from "./AuthContext";
 
 function App() {
+  const authContext = useContext(AuthContext)
+
+  if (!authContext) {
+    throw new Error("AuthContext missing")
+  }
+
+  const {loading} = authContext
+  if (loading) {
+    return <div></div>
+  }
+
   return (
     <div className="App">
 		<Router>

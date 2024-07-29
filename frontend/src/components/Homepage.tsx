@@ -1,15 +1,8 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef} from 'react';
 import './Homepage.css';
 import "./Header.css";
-import { AuthContext } from "../AuthContext"
 
 const Homepage: React.FC = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext) {
-    throw new Error("authContext missing");
-  };
-  const {user, loggedIn} = authContext;
-
   const imageRefs = useRef<HTMLImageElement[]>([]);
   const h1Refs = useRef<HTMLHeadingElement[]>([]);
   const pRefs = useRef<HTMLParagraphElement[]>([]);
