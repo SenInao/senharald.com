@@ -154,7 +154,8 @@ export const userProfileCtrl = async (req: Request, res: Response) => {
       profilePicture:user.profilePicture,
       chats: user.chats,
       friends: user.friends,
-      friendRequests: user.friendRequests
+      friendRequests: user.friendRequests,
+      previousGames : user.previousGames
     };
 
 		res.status(200).json({status: true, user:jsonUser});
