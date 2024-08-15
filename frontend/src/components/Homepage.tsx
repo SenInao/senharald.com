@@ -92,13 +92,13 @@ const Homepage: React.FC = () => {
         <img src={`${process.env.PUBLIC_URL}/assets/discord.png`} alt="Discord" ref={el => el && imageRefs.current.push(el)}/>
         <h1 ref={el => el && h1Refs.current.push(el)}>CHAT</h1>
         <p ref={el => el && pRefs.current.push(el)}>Introducing CHAT, a revolutionary platform designed to connect people from all corners of the globe through seamless and intuitive communication. With its sleek design and user-friendly interface, CHAT offers a dynamic space where users can engage in vibrant conversations, share ideas, and forge meaningful connections effortlessly. Whether you're catching up with friends, collaborating with colleagues, or meeting new people, our app provides the perfect environment for fostering dialogue and building relationships. Join the conversation today and experience the future of communication.</p>
-		<button onClick={() => {window.open("chat.senharald.com", "_self")}}>Check out  →</button>
+		<button onClick={() => {window.location.href = "http://chat.senharald.com"}}>Check out  →</button>
       </main>
       <main>
         <img src={`${process.env.PUBLIC_URL}/assets/spaceship.jpg`} alt="Spaceship" ref={el => el && imageRefs.current.push(el)}/>
         <h1 ref={el => el && h1Refs.current.push(el)}>GAMES</h1>
         <p ref={el => el && pRefs.current.push(el)}>Welcome to GAMES, your destination for engaging and immersive gaming experiences! Dive into a world of excitement and adventure with our curated selection of games designed to captivate players of all ages and interests. Whether you're a seasoned gamer looking for a new challenge or a casual player seeking some fun, we have something for everyone. From action-packed adventures to mind-bending puzzles, our games are carefully crafted to provide hours of entertainment. Join our community today and let the gaming begin!</p>
-		<button>Check out  →</button>
+		<button onClick={() => {window.location.href = "http://games.senharald.com"}}>Check out  →</button>
       </main>
       <main>
         <img src={`${process.env.PUBLIC_URL}/assets/github.png`} alt="github" ref={el => el && imageRefs.current.push(el)}/>
