@@ -21,17 +21,17 @@ function App() {
 
   return (
     <div className="App">
-		<Router>
-		  <Navbar/>
-			<Routes>
-				<Route path="/" element={<Homepage/>}/>
-				<Route path="/login" element={<Login/>}/>
-				<Route path="/register" element={<Register/>}/>
-				<Route path="/profile" element={<Profile/>}/>
-				<Route path="/profile/upload-picture" element={<UploadProfilePic/>}/>
-			</Routes>
-		</Router>
-	</div>
+      <Router>
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Homepage/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/profile" element={<Profile/>}/>
+          <Route path="/profile/upload-picture" element={<UploadProfilePic/>}/>
+        </Routes>
+      </Router>
+    </div>
   );
 };
 
