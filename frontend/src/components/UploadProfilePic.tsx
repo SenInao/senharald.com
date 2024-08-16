@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UploadProfilePic.css"
-import { checkLogin } from "./checkLogin";
 import { AuthContext } from "../AuthContext";
 import { parentDomain } from "../constants";
 
@@ -10,23 +9,16 @@ const UploadProfilePic:React.FC = () => {
   const navigate = useNavigate();
 
   const auth = useContext(AuthContext);
+  if (!auth) throw new Error("context missing")
+
+  const {loggedIn} = auth
 
 
   useEffect(()=> {
-    checkLogin().then(result => {
-      if (!result.success) {
-        navigate("/login")
-      } else {
-        if (!auth) {
-          return;
-        };
-
-        const {setLoggedIn, setUser} = auth;
-        setLoggedIn(true);
-        setUser(result.user);
-      };
-    });
-  });
+    if (!loggedIn) {
+      navigate("/login")
+    }
+  }, []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const errorLabelRef = useRef<HTMLLabelElement>(null);

@@ -3,7 +3,6 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
-import { checkLogin } from "./checkLogin";
 import { parentDomain } from "../constants";
 
 interface User {
@@ -34,26 +33,16 @@ const Profile: React.FC = () => {
     throw new Error("authContext missing")
   };
 
-  const {user, setUser} = authContext;
+  const {loggedIn, setUser, user} = authContext;
   const [usernameConfirm, setUsernameConfirm] = useState(false);
   const [fullnameConfirm, setFullnameConfirm] = useState(false);
   const [emailConfirm, setEmailConfirm] = useState(false);
 
   useEffect(()=> {
-    checkLogin().then(result => {
-      if (!result.success) {
-        navigate("/login")
-      } else {
-        if (!authContext) {
-          return;
-        };
-
-        const {setLoggedIn, setUser} = authContext;
-        setLoggedIn(true);
-        setUser(result.user);
-      };
-    });
-  });
+    if (!loggedIn) {
+      navigate("/login")
+    }
+  }, []);
 
   const updateProfile = async (user:User) => {
     try {

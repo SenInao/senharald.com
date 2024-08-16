@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const {loggedIn, setLoggedIn, setUser, user} = authContext;
+  const {loggedIn, setLoggedIn, setUser, user, loading} = authContext;
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
       console.log("error!")
     };
   };
-
+  
   return (
 		<nav>
 			<div className="sitenav">
